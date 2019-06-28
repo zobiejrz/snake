@@ -6,8 +6,9 @@ namespace snake
     {
         static void Main(string[] args)
         {
-            Game game = new Game(20, 10);
+            Game game = new Game();
             game.Render();
+            
         }
     }
 }
