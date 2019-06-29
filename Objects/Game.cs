@@ -8,7 +8,7 @@ namespace snake.Objects
     public class Game
     {
         public string[,] matrix = new string[10, 20];
-        private Snake player = new Snake();
+        public Snake player = new Snake();
 
         public Game()
         {
@@ -30,17 +30,17 @@ namespace snake.Objects
             for (int col = 0; col < 20; col++) {end+="-";}
             end += "+";
             Console.WriteLine(end);
-            for (int row = 0; row < 10; row++)
+            for (int y = 0; y < 10; y++)
             {
                 string line = "";
-                for (int col = 0; col < 20; col++)
+                for (int x = 0; x < 20; x++)
                 {
                     /*  vv ADDS SNAKE TO BOARD vv*/
-                    if (player.Locations.Contains(new int[2] {row, col}))
+                    if (IsSnakeHere(new int[2] {x, y}))
                     {
                         // PIECE OF SNAKE
                         pieceOfSnake++;
-                        if (player.Locations[0][0] == row && player.Locations[0][1] == col)
+                        if (player.GetHead()[0] == x && player.GetHead()[1] == y)
                         {
                             line += player.head;
                         }
@@ -52,7 +52,7 @@ namespace snake.Objects
                     }
                     else
                     {
-                        line += matrix[row, col];
+                        line += matrix[y, x];
                     }
                     /* ^^ ADDS SNAKE TO BOARD ^^ */
                     
@@ -63,12 +63,6 @@ namespace snake.Objects
             Console.WriteLine($"{pieceOfSnake} pieces of snake");
         }
 
-        public void TakeStep(Direction d)
-        {
-
-        }
-        
-
         public enum Direction
         {
             UP = 0,
@@ -76,6 +70,18 @@ namespace snake.Objects
             DOWN,
             LEFT
         }
-        
+
+        public Boolean IsSnakeHere(int[] location)
+        {
+            foreach (int[] snake in player.Locations)
+            {
+                if (snake[0] == location[0] && snake[1] == location[1])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
