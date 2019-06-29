@@ -7,6 +7,7 @@ namespace snake.Objects
     {
         private Square[,] matrix = new Square[10, 20];
         private readonly Snake _player;
+        private readonly Apple __apple;
         public bool IsNotDead = true;
         public int Score = 0;
 
@@ -24,6 +25,10 @@ namespace snake.Objects
             int sx = _player.Location[1];
             matrix[sx, sy].state = _player.Head;
             matrix[sx, sy].decay = _player.Length - 1;
+            
+            __apple = new Apple();
+            matrix[sx - 3, sy].state = __apple.State;
+            matrix[sx - 3, sy].decay = 1000; // I mean, if it disappears it's the players fault now. 1000 moves to get an apple right above you? Yeah, not on me.
         }
 
         public void Render()
@@ -50,7 +55,7 @@ namespace snake.Objects
                     currentX = 0;
                 }
 
-                if (square.decay != 0)
+                if (square.decay != 0 && square.decay != 1000)
                 {
                     square.decay--;
                 }
@@ -132,7 +137,19 @@ namespace snake.Objects
             
             foreach (Square square in matrix)
             {
-                square.state = square.decay > 0 ? _player.Body : " ";
+//                square.state = square.decay > 0  ? _player.Body : " ";
+                if (square.decay > 0 && square.decay != 1000)
+                {
+                    square.state = _player.Body;
+                }
+                else if (square.decay != 1000)
+                {
+                    square.state = " ";
+                }
+                else
+                {
+                    square.state = __apple.State;
+                }
             }
             
             int sy = _player.Location[0];
@@ -144,6 +161,11 @@ namespace snake.Objects
             }
             else
             {
+                if (matrix[sx, sy].state == __apple.State)
+                {
+                    Feed();
+                    NewApple();
+                }
                 matrix[sx, sy].state = _player.Head;
 
             }
@@ -154,7 +176,7 @@ namespace snake.Objects
 //            Thread.Sleep(250);
         }
 
-        public void Feed()
+        private void Feed()
         {
             _player.Length++;
             foreach (Square square in matrix)
@@ -164,8 +186,19 @@ namespace snake.Objects
                     square.decay++;
                 }
 
-                Score++;
             }
+        }
+
+        private void NewApple()
+        {
+            Random random = new Random();
+            int x = random.Next(0, 9);
+            int y = random.Next(0, 19);
+            matrix[x, y].state = __apple.State;
+            matrix[x, y].decay = 1000;
+            __apple.Location[0] = x;
+            __apple.Location[1] = y;
+            Score++;
         }
         
 

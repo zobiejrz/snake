@@ -16,11 +16,7 @@ namespace snake
             {
                 Console.Write("MOVE [ a | s | d | w ] >>> ");
                 string move = Console.ReadLine();
-                bool valid = false;
-                if ((move == "a" && lastMove != "d") || (move == "s" && lastMove != "w") || (move == "d" && lastMove != "a") || (move == "w" && lastMove != "s"))
-                {
-                    valid = true;
-                }
+                bool valid = (move == "a" && lastMove != "d") || (move == "s" && lastMove != "w") || (move == "d" && lastMove != "a") || (move == "w" && lastMove != "s");
 
                 if (valid)
                 {
@@ -43,7 +39,7 @@ namespace snake
                 }
                 else
                 {
-                    Console.WriteLine("Can't go the way you came, that would kill you!");
+                    Console.WriteLine("Can't go the way you came!");
                 }
 
                 
