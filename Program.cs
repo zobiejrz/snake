@@ -9,14 +9,48 @@ namespace snake
         static void Main(string[] args)
         {
             Game game = new Game();
-            
-            for (int i = 0; i < 100; i++)
+
+            game.Render();
+            string lastMove = "";
+            while (game.IsNotDead)
             {
-                game.TakeStep(Game.Direction.DOWN);
+                Console.Write("MOVE [ a | s | d | w ] >>> ");
+                string move = Console.ReadLine();
+                bool valid = false;
+                if ((move == "a" && lastMove != "d") || (move == "s" && lastMove != "w") || (move == "d" && lastMove != "a") || (move == "w" && lastMove != "s"))
+                {
+                    valid = true;
+                }
+
+                if (valid)
+                {
+                    switch (move)
+                    {
+                        case "a":
+                            game.TakeStep(Game.Direction.Left);
+                            break;
+                        case "s":
+                            game.TakeStep(Game.Direction.Down);
+                            break;
+                        case "d":
+                            game.TakeStep(Game.Direction.Right);
+                            break;
+                        case "w":
+                            game.TakeStep(Game.Direction.Up);
+                            break;
+                    }
+                    lastMove = move;
+                }
+                else
+                {
+                    Console.WriteLine("Can't go the way you came, that would kill you!");
+                }
+
+                
             }
             
-            
-            
+            Console.WriteLine($"GAME OVER.\nFINAL SCORE: {game.Score}");
+
         }
     }
 }

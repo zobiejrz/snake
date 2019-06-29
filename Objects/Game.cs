@@ -1,15 +1,14 @@
 using System;
-using snake.Objects;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace snake.Objects
 {
     public class Game
     {
-        public Square[,] matrix = new Square[10, 20];
-        public Snake player = new Snake();
+        private Square[,] matrix = new Square[10, 20];
+        private readonly Snake _player;
+        public bool IsNotDead = true;
+        public int Score = 0;
 
         public Game()
         {
@@ -20,30 +19,15 @@ namespace snake.Objects
                     matrix[i, j] = new Square(i, j);
                 }
             }
-            player = new Snake();
-            int sy = player.Location[0];
-            int sx = player.Location[1];
-            matrix[sx, sy].state = player.Head;
-            matrix[sx, sy].decay = player.Length - 1;
+            _player = new Snake();
+            int sy = _player.Location[0];
+            int sx = _player.Location[1];
+            matrix[sx, sy].state = _player.Head;
+            matrix[sx, sy].decay = _player.Length - 1;
         }
 
         public void Render()
         {
-            foreach (Square square in matrix)
-            {
-                if (square.decay > 0)
-                {
-                    square.state = player.Body;
-                }
-                else
-                {
-                    square.state = " ";
-                }
-            }
-            int sy = player.Location[0];
-            int sx = player.Location[1];
-            matrix[sx, sy].state = player.Head;
-            matrix[sx, sy].decay = player.Length;
 
             string end = "+";
             for (int col = 0; col < 20; col++) {end+="-";}
@@ -75,44 +59,41 @@ namespace snake.Objects
             Console.WriteLine(end);
         }
         
-        public void TakeStep(Game.Direction d)
+        public void TakeStep(Direction d)
         {
-            player.Facing = d;
+            _player.Facing = d;
             int[] direction = new int[2];
             switch (d)
             {
-                case Game.Direction.UP:
-                    direction = player.UP;
+                case Direction.Up:
+                    direction = _player.Up;
                     break;
-                case Game.Direction.RIGHT:
-                    direction = player.RIGHT;
+                case Direction.Right:
+                    direction = _player.Right;
                     break;
-                case Game.Direction.DOWN:
-                    direction = player.DOWN;
+                case Direction.Down:
+                    direction = _player.Down;
                     break;
-                case Game.Direction.LEFT:
-                    direction = player.LEFT;
+                case Direction.Left:
+                    direction = _player.Left;
                     break;
             }
-            
-            
-//            player.Location[0] += direction[0];
-//            player.Location[1] += direction[1];
-            if (player.Location[0] + direction[0] < 20)
+
+            if (_player.Location[0] + direction[0] < 20)
             {
-                if (player.Location[0] + direction[0] >= 0)
+                if (_player.Location[0] + direction[0] >= 0)
                 {
-                    player.Location[0] += direction[0];
+                    _player.Location[0] += direction[0];
                 }
                 else
                 {
-                    if (player.Facing == Direction.RIGHT)
+                    if (_player.Facing == Direction.Right)
                     {
-                        player.Location[0] = 0;
+                        _player.Location[0] = 0;
                     }
-                    else if (player.Facing == Direction.LEFT)
+                    else if (_player.Facing == Direction.Left)
                     {
-                        player.Location[0] = 19;
+                        _player.Location[0] = 19;
                     }
                     
                 }
@@ -120,25 +101,25 @@ namespace snake.Objects
             else
             {
 
-                player.Location[0] = 0;
+                _player.Location[0] = 0;
             }
-            
-            if (player.Location[1] + direction[1] < 10)
+
+            if (_player.Location[1] + direction[1] < 10)
             {
                 
-                if (player.Location[1] + direction[1] >= 0)
+                if (_player.Location[1] + direction[1] >= 0)
                 {
-                    player.Location[1] += direction[1];
+                    _player.Location[1] += direction[1];
                 }
                 else
                 {
-                    if (player.Facing == Direction.DOWN)
+                    if (_player.Facing == Direction.Down)
                     {
-                        player.Location[1] = 0;
+                        _player.Location[1] = 0;
                     }
-                    else if (player.Facing == Direction.UP)
+                    else if (_player.Facing == Direction.Up)
                     {
-                        player.Location[1] = 9;
+                        _player.Location[1] = 9;
                     }
                     
                 }
@@ -146,32 +127,54 @@ namespace snake.Objects
             else
             {
 
-                player.Location[1] = 0;
+                _player.Location[1] = 0;
             }
             
-            this.Render();
-            Thread.Sleep(250);
+            foreach (Square square in matrix)
+            {
+                square.state = square.decay > 0 ? _player.Body : " ";
+            }
+            
+            int sy = _player.Location[0];
+            int sx = _player.Location[1];
+            if (matrix[sx, sy].state == "O")
+            {
+                IsNotDead = false;
+                matrix[sx, sy].state = _player.Dead;
+            }
+            else
+            {
+                matrix[sx, sy].state = _player.Head;
+
+            }
+            matrix[sx, sy].decay = _player.Length;
+
+            Render();
+                
+//            Thread.Sleep(250);
         }
 
         public void Feed()
         {
-            player.Length++;
+            _player.Length++;
             foreach (Square square in matrix)
             {
                 if (square.decay > 0)
                 {
                     square.decay++;
                 }
+
+                Score++;
             }
         }
         
 
         public enum Direction
         {
-            UP = 0,
-            RIGHT,
-            DOWN,
-            LEFT
+            Up = 0,
+            Right,
+            Down,
+            Left
         }
 
     }
