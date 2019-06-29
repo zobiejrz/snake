@@ -21,8 +21,10 @@ namespace snake.Objects
                 }
             }
             player = new Snake();
-            matrix[3, 10].state = player.Head;
-            matrix[3, 10].decay = player.Length;
+            int sy = player.Location[0];
+            int sx = player.Location[1];
+            matrix[sx, sy].state = player.Head;
+            matrix[sx, sy].decay = player.Length - 1;
         }
 
         public void Render()
@@ -75,6 +77,7 @@ namespace snake.Objects
         
         public void TakeStep(Game.Direction d)
         {
+            player.Facing = d;
             int[] direction = new int[2];
             switch (d)
             {
@@ -91,9 +94,60 @@ namespace snake.Objects
                     direction = player.LEFT;
                     break;
             }
+            
+            
+//            player.Location[0] += direction[0];
+//            player.Location[1] += direction[1];
+            if (player.Location[0] + direction[0] < 20)
+            {
+                if (player.Location[0] + direction[0] >= 0)
+                {
+                    player.Location[0] += direction[0];
+                }
+                else
+                {
+                    if (player.Facing == Direction.RIGHT)
+                    {
+                        player.Location[0] = 0;
+                    }
+                    else if (player.Facing == Direction.LEFT)
+                    {
+                        player.Location[0] = 19;
+                    }
+                    
+                }
+            }
+            else
+            {
 
-            player.Location[0] += direction[0];
-            player.Location[1] += direction[1];
+                player.Location[0] = 0;
+            }
+            
+            if (player.Location[1] + direction[1] < 10)
+            {
+                
+                if (player.Location[1] + direction[1] >= 0)
+                {
+                    player.Location[1] += direction[1];
+                }
+                else
+                {
+                    if (player.Facing == Direction.DOWN)
+                    {
+                        player.Location[1] = 0;
+                    }
+                    else if (player.Facing == Direction.UP)
+                    {
+                        player.Location[1] = 9;
+                    }
+                    
+                }
+            }
+            else
+            {
+
+                player.Location[1] = 0;
+            }
             
             this.Render();
             Thread.Sleep(250);
