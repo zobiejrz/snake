@@ -21,8 +21,8 @@ namespace snake.Objects
                 }
             }
             player = new Snake();
-            matrix[5, 10].state = player.Head;
-            matrix[5, 10].decay = player.Length;
+            matrix[3, 10].state = player.Head;
+            matrix[3, 10].decay = player.Length;
         }
 
         public void Render()
