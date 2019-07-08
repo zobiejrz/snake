@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Threading;
 using snake.Objects;
+
+// This program will run the sort of crappy version in the terminal
 
 namespace snake
 {
@@ -42,9 +43,9 @@ namespace snake
                     Console.WriteLine("Can't go the way you came!");
                 }
 
-                
+
             }
-            
+
             Console.WriteLine($"GAME OVER.\nFINAL SCORE: {game.Score}");
 
         }
