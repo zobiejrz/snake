@@ -25,7 +25,7 @@ namespace snake.Objects
             int sx = _player.Location[1];
             matrix[sx, sy].state = _player.Head;
             matrix[sx, sy].decay = _player.Length - 1;
-            
+
             __apple = new Apple();
             matrix[sx - 3, sy].state = __apple.State;
             matrix[sx - 3, sy].decay = 1000; // I mean, if it disappears it's the players fault now. 1000 moves to get an apple right above you? Yeah, not on me.
@@ -33,7 +33,6 @@ namespace snake.Objects
 
         public void Render()
         {
-
             string end = "+";
             for (int col = 0; col < 20; col++) {end+="-";}
             end += "+";
@@ -46,7 +45,7 @@ namespace snake.Objects
                 {
                     Console.Write("|");
                 }
-                
+
                 Console.Write(square.state);
                 currentX++;
                 if (currentX == 20)
@@ -60,10 +59,10 @@ namespace snake.Objects
                     square.decay--;
                 }
             }
-            
+
             Console.WriteLine(end);
         }
-        
+
         public void TakeStep(Direction d)
         {
             _player.Facing = d;
@@ -100,7 +99,7 @@ namespace snake.Objects
                     {
                         _player.Location[0] = 19;
                     }
-                    
+
                 }
             }
             else
@@ -111,7 +110,7 @@ namespace snake.Objects
 
             if (_player.Location[1] + direction[1] < 10)
             {
-                
+
                 if (_player.Location[1] + direction[1] >= 0)
                 {
                     _player.Location[1] += direction[1];
@@ -126,7 +125,7 @@ namespace snake.Objects
                     {
                         _player.Location[1] = 9;
                     }
-                    
+
                 }
             }
             else
@@ -134,7 +133,7 @@ namespace snake.Objects
 
                 _player.Location[1] = 0;
             }
-            
+
             foreach (Square square in matrix)
             {
 //                square.state = square.decay > 0  ? _player.Body : " ";
@@ -151,7 +150,7 @@ namespace snake.Objects
                     square.state = __apple.State;
                 }
             }
-            
+
             int sy = _player.Location[0];
             int sx = _player.Location[1];
             if (matrix[sx, sy].state == "O")
@@ -172,7 +171,7 @@ namespace snake.Objects
             matrix[sx, sy].decay = _player.Length;
 
             Render();
-                
+
 //            Thread.Sleep(250);
         }
 
@@ -200,7 +199,7 @@ namespace snake.Objects
             __apple.Location[1] = y;
             Score++;
         }
-        
+
 
         public enum Direction
         {
